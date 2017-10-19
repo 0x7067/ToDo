@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,15 +40,13 @@ public class AddNewTaskActivity extends AppCompatActivity implements RealmChange
         } else {
 
             mRealm.beginTransaction();
-
-            Task task = mRealm.createObject(Task.class, UUID.randomUUID().toString());
+            Task task = mRealm.createObject(Task.class, System.currentTimeMillis());
             task.setTask_title(mEditTextTitle.getText().toString());
             task.setCreated_at(dateFormat.format(new Date()));
             task.setDone(false);
-
-            mRealm.commitTransaction();
             mRealm.addChangeListener(this);
-            onBackPressed();
+            mRealm.commitTransaction();
+
         }
     }
 

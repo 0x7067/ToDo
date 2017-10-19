@@ -9,20 +9,19 @@ import io.realm.annotations.Required;
  */
 
 public class Task extends RealmObject {
-    @Required
     @PrimaryKey
-    private String id;
+    private long id;
     @Required
     private String task_title;
     @Required
     private String created_at;
     private boolean done;
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

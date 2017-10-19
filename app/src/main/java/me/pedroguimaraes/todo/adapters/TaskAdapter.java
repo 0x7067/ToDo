@@ -1,6 +1,5 @@
 package me.pedroguimaraes.todo.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,13 +26,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private LayoutInflater mLayoutInflater;
     private RealmResults<Task> mTasks;
 
-    public TaskAdapter(Context context, RealmQuery<Task> tasks) {
+
+    public TaskAdapter(RealmQuery<Task> tasks) {
         mTasks = tasks.findAll().sort("id");
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        mLayoutInflater = LayoutInflater.from(parent.getContext());
         View view = mLayoutInflater.inflate(R.layout.item_task, parent, false);
         return new ViewHolder(view);
     }
@@ -46,6 +46,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.mTaskTitle.setText(task.getTask_title());
         holder.mCreatedAt.setText(task.getCreated_at());
         holder.mCheckbox.setChecked(task.isDone());
+
 
     }
 
@@ -67,6 +68,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public RealmResults<Task> getmTasks() {
+        return mTasks;
     }
 }
 
