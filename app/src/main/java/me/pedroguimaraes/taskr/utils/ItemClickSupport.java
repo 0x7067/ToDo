@@ -1,9 +1,9 @@
-package me.pedroguimaraes.todo.utils;
+package me.pedroguimaraes.taskr.utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import me.pedroguimaraes.todo.R;
+import me.pedroguimaraes.taskr.R;
 
 /**
  * Created by pedroguimaraes on 10/11/17.

@@ -37,4 +37,6 @@ dependencies {
     dependencies {
         compile 'com.github.thorbenprimke:realm-recyclerview:0.9.25'
     }
+
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
 }

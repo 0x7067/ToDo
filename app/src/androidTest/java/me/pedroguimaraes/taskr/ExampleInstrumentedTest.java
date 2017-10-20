@@ -1,4 +1,4 @@
-package me.pedroguimaraes.todo;
+package me.pedroguimaraes.taskr;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

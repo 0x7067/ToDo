@@ -1,13 +1,18 @@
-package me.pedroguimaraes.todo;
+package me.pedroguimaraes.taskr;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,10 +20,10 @@ import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import me.pedroguimaraes.todo.adapters.TaskAdapter;
-import me.pedroguimaraes.todo.models.Task;
-import me.pedroguimaraes.todo.utils.ItemClickSupport;
-import me.pedroguimaraes.todo.view.RecyclerViewEmptySupport;
+import me.pedroguimaraes.taskr.adapters.TaskAdapter;
+import me.pedroguimaraes.taskr.models.Task;
+import me.pedroguimaraes.taskr.utils.ItemClickSupport;
+import me.pedroguimaraes.taskr.view.RecyclerViewEmptySupport;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,9 +40,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-
         ButterKnife.bind(this);
-
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setupRecyclerView();
     }
 
@@ -73,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, AddNewTaskActivity.class));
     }
 
-    // Delete assincrono que eu não consegui fazer funcionar
+
+    // Delete assincrono que eu não consegui fazer funcionar (grrr)
 
 //    public void deleteTask(final int position) {
 //        mRealm.executeTransactionAsync(new Realm.Transaction() {
@@ -101,6 +106,38 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.task_list, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                deleteCompletedTasks();
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+                break;
+            case R.id.action_settings:
+                Toast.makeText(this, "Settings não implementado", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_github:
+                i = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/0x7067/ToDo"));
+                startActivity(i);
+                break;
+            case R.id.action_feedback:
+                i = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/0x7067/ToDo/issues"));
+                startActivity(i);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     public void deleteTask(final int position, RealmQuery<Task> tasksQuery) {
         final RealmResults<Task> tasks = tasksQuery.findAll().sort("id");
         Realm realm = null;
@@ -117,6 +154,24 @@ public class MainActivity extends AppCompatActivity {
     } finally {
             realm.close();
         }
+    }
+
+    private void deleteCompletedTasks() {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmResults<Task> toDeleteTask = realm.where(Task.class).equalTo("done", true).findAll();
+                    Log.d("TAG", toDeleteTask.toString());
+                    toDeleteTask.deleteAllFromRealm();
+                }
+            });
+        } finally {
+            realm.close();
+        }
+
     }
 
     @Override

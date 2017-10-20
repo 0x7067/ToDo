@@ -1,4 +1,4 @@
-package me.pedroguimaraes.todo.models;
+package me.pedroguimaraes.taskr.models;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;

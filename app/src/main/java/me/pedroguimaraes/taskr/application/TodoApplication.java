@@ -1,4 +1,4 @@
-package me.pedroguimaraes.todo.application;
+package me.pedroguimaraes.taskr.application;
 
 import android.app.Application;
 
