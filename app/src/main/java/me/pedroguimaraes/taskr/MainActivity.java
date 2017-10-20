@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +32,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.rv_tasks)
     RecyclerViewEmptySupport mRecyclerView;
 
-    @BindView(R.id.empty_view)
+    @BindView(R.id.empty_view_text)
     TextView mTextView;
+    @BindView(R.id.empty_view_image)
+    ImageView mImageView;
+    @BindView(R.id.empty_view)
+    LinearLayout mLinearLayout;
 
     private Realm mRealm;
 
@@ -50,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setEmptyView(mTextView);
+        mRecyclerView.setEmptyView(mLinearLayout);
         mRealm = Realm.getDefaultInstance();
         final RealmQuery<Task> tasksQuery = mRealm.where(Task.class);
         mRecyclerView.setAdapter(new TaskAdapter(tasksQuery));
